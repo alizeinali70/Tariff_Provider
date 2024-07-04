@@ -1,0 +1,80 @@
+﻿@page
+@model Tariff_Provider.Pages.ConsumptionModel
+@{
+    ViewData["Title"] = "Consumption and Products";
+}
+
+<form method="post">
+    <div>
+        <label for="consumption">Enter Consumption:</label>
+        <input type="number" id="consumption" name="Consumption" value="@Model.Consumption" min="0" step="any" />
+        <button type="submit">Submit</button>
+    </div>
+</form>
+
+@if (Model.Products != null && Model.Products.Count > 0)
+{
+    <h2>Product Table</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Product_Type</th>
+                <th>Base_Cost</th>
+                <th>AdditionaKwhCost</th>
+                <th>IncludedKwh</th>
+                <th>@*AnnualCost*@</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td>@product.Name</td>
+                    <td>@product.Product_Type.Id</td>
+                    <td>@product.Base_Cost.ToString("C")</td>
+                    <td>@product.AdditionaKwhCost.ToString("C")</td>
+                    <td>@product.IncludedKwh.ToString("C")</td>
+                    @*@if (@Model.AnnualCost.Count == 0)
+                        {
+                            <td>0</td>
+                        }
+                        else
+                        {
+                            <td>@Model.AnnualCost</td>
+                        }*@
+
+                    @*<td>@product.TariffProvider?.Name</td>*@
+                </tr>
+            }
+
+
+        </tbody>
+    </table>
+    @if (Model.ProductsWithAnnualCost.Count > 0)
+    {
+        <h2>Annual Cost Table</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>AnnualCost</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model.ProductsWithAnnualCost)
+                {
+                    <tr>
+                        <td>@item.product_Type.Name</td>
+                        <td>@item.AnnualCost.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+else if (Model.Products != null && Model.Products.Count == 0)
+{
+    <p>No products available for the entered consumption.</p>
+}
